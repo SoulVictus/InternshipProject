@@ -13,13 +13,14 @@ class MongoDbConnectionClient:
     def get_all_documents(self):
         documentList = []
         for document in self.collection.find():
-            documentList.append(JSONEncoder().encode(document))
-        return str(documentList)
+            documentList.append(json.loads(JSONEncoder().encode(document)))
+        return documentList
         
     def get_document(self, id):
         document = self.collection.find_one({"id": id})
-        jsonStr = JSONEncoder().encode(document)
-        return str(jsonStr)
+        # encode MongoDB's ObjectId into string
+        jsonStr = json.loads(JSONEncoder().encode(document))
+        return jsonStr
 
     def put_file_into_collection(self, name, path):
         documentAmount = self.collection.count_documents({})
@@ -32,3 +33,6 @@ class MongoDbConnectionClient:
         }
         self.collection.insert_one(document).inserted_id
 
+testdb = MongoDbConnectionClient('mongodb+srv://testuser01:test12345@cluster0.hdufc.azure.mongodb.net/InternshipProjectDB?retryWrites=true&w=majority')
+
+print(testdb.get_document(1))

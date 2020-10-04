@@ -23,7 +23,7 @@ class MongoDbConnectionClient:
         jsonStr = json.loads(JSONEncoder().encode(document))
         return jsonStr
 
-    def put_file_into_collection(self, name, path):
+    def put_document_into_collection(self, name, path):
         documentAmount = self.collection.count_documents({})
         document = {
             "id": documentAmount+1,

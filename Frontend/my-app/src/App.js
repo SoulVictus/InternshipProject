@@ -42,20 +42,47 @@ const ListOfAvaibleItems = (props) => {
   }
 }
 
-const SendFile = () => {
+const SendFile = (props) => {
    const data = {
      name: "fromfrontend",
      path: "testpath/testpath2"
    }
-   
-    fetch(PROXY_URL+NGROK_URL+"/upload", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+
+   fetch(PROXY_URL+NGROK_URL+"/upload", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  
 }
+
+const SendF = () => {
+  const fileInput = React.createRef();
+
+  const handleSubmit = (event) =>{
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('file', fileInput.current.files[0]);
+    fetch(PROXY_URL+NGROK_URL+"/fileupload", {
+      method: "POST",
+      body: formData
+    })
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Send file:
+        <input type="file" ref={fileInput} />
+      </label>
+      <br />
+      <button type="submit">Send</button>
+    </form>
+  )
+}
+
 
 const App = () => {
   const [list, setList] = useState([]);
@@ -75,6 +102,7 @@ const App = () => {
       <div>
         <button className="Buttons" onClick={showItems}>Show list</button>
         <button className="Buttons" onClick={SendFile}>Add file</button>
+        <SendF />
       </div>
     </div>
   )

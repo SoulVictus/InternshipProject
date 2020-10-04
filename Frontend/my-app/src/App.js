@@ -1,28 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+const ListOfAvaibleItems = () => {
+  const [error, setError] = useState(null);
   const [items, setItems] = useState([]);
+  const [isDataFetched, setFetched] = useState(false);
+
+  //needed to avoid "Access-Control-Allow-Origin" error in browser
   const PROXY_URL = 'http://cors-anywhere.herokuapp.com/';
-  //remember to change ngrok every restart
-  const NGROK_URL = 'http://cb57bb83bbdb.ngrok.io/';
+  //remember to change ngrok every backend restart
+  const NGROK_URL = 'http://d8c3ee7e4864.ngrok.io/';
+
   useEffect(() => {
-    fetch(PROXY_URL+NGROK_URL+"files/1")
+    fetch(PROXY_URL+NGROK_URL+"files")
       .then(res => res.json())
       .then((result) => {
-        console.log(result);
-        setItems(result);
+        setItems(result.filelist);
+        setFetched(true);
       },
       (error) => {
-        console.log(error);
+        setError(error);
+        setFetched(true);
       })
-
   }, []);
 
+  if (error){
+    return <div>Error: {error.message}</div>
+  } else if (!isDataFetched) {
+    return <div>Fetching data...</div>
+  } else {
+    return (
+      <ul>
+        {items.map(item => (
+          <li key={item.name}>
+            {item.name}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+}
+
+const ShowListButton = () => {
+  const handleClick = () => {
+    console.log("click");
+  }
+
   return (
-    <div style={{ flex: 1, padding: 24 }}>
+    <button className="Buttons" onClick={handleClick}>Show file list</button>
+  )
+
+}
+
+const App = () => {
+  const [list, setList] = useState([]);
+
+  const showItems = () => {
+    setList(<ListOfAvaibleItems />);
+  }
+
+  return (
+    <div className="App-header">
+      <div className="List">
+        {list}
+      </div>
+      <div>
+        <ShowListButton className="Buttons" />
+        <button className="Buttons" onClick={showItems}>Show list</button>
+        <button className="Buttons">Add file</button>
+      </div>
     </div>
-  );
+  )
 }
 
 

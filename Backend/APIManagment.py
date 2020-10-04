@@ -6,16 +6,6 @@ testdb = MongoDbConnectionClient('mongodb+srv://testuser01:test12345@cluster0.hd
 
 app = Flask(__name__)
 
-test = [
-        {
-                "test1" : 5,
-                "name" : "lalala"
-        },
-        {
-                "test2" : 4,
-                "kod" : "1252151"
-        }
-]
 
 @app.route("/files", methods=["GET"])
 def get_file_list():
@@ -24,10 +14,6 @@ def get_file_list():
 @app.route("/files/<int:file_id>", methods=["GET"])
 def get_specific_file(file_id):
         return testdb.get_document(file_id)
-
-@app.route("/test", methods=["GET"])
-def get_test():
-        return jsonify({"test": test})
 
 
 @app.route("/upload", methods=["POST"])

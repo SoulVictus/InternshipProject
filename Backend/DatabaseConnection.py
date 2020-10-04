@@ -13,12 +13,13 @@ class MongoDbConnectionClient:
     def get_all_documents(self):
         documentList = []
         for document in self.collection.find():
+            #JSONEncoder().encode() encode MongoDB's ObjectId into string
             documentList.append(json.loads(JSONEncoder().encode(document)))
         return documentList
         
     def get_document(self, id):
         document = self.collection.find_one({"id": id})
-        # encode MongoDB's ObjectId into string
+        #JSONEncoder().encode() encode MongoDB's ObjectId into string
         jsonStr = json.loads(JSONEncoder().encode(document))
         return jsonStr
 

@@ -30,7 +30,7 @@ class MongoDbConnectionClient:
             "name": name,
             "path": path,
             "timestamp": generate_timestamp(),
-            "md5": generate_md5("test")
+            "md5": generate_md5(name)
         }
         self.collection.insert_one(document).inserted_id
 

@@ -17,8 +17,15 @@ def get_specific_file(file_id):
 
 
 @app.route("/upload", methods=["POST"])
-def upload_to_database(name, path):
-        return testdb.put_file_into_collection(name, path)
+def upload_to_database():
+        name = request.json["name"]
+        path = request.json["path"]
+        print("POST TEST")
+        try:
+                testdb.put_file_into_collection(name, path)
+                return "201"
+        except:
+                return "400"
 
 if __name__ == "__main__":
     app.run()

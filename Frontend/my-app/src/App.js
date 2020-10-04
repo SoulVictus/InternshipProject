@@ -7,7 +7,7 @@ import './App.css';
   const NGROK_URL = 'http://d8c3ee7e4864.ngrok.io';
 
 
-const ListOfAvaibleItems = () => {
+const ListOfAvaibleItems = (props) => {
   const [error, setError] = useState(null);
   const [items, setItems] = useState([]);
   const [isDataFetched, setFetched] = useState(false);
@@ -23,7 +23,7 @@ const ListOfAvaibleItems = () => {
         setError(error);
         setFetched(true);
       })
-  }, []);
+  }, [props.refresh]);
 
   if (error){
     return <div>Error: {error.message}</div>
@@ -57,22 +57,14 @@ const SendFile = () => {
     })
 }
 
-const ShowListButton = () => {
-  const handleClick = () => {
-    console.log("click");
-  }
-
-  return (
-    <button className="Buttons" onClick={handleClick}>Show file list</button>
-  )
-
-}
-
 const App = () => {
   const [list, setList] = useState([]);
+  const [refreshAction, setRefreshToggle] = useState(true);
 
   const showItems = () => {
-    setList(<ListOfAvaibleItems />);
+    console.log(refreshAction);
+    setList(<ListOfAvaibleItems refresh={refreshAction}/>);
+    setRefreshToggle(!refreshAction);
   }
 
   return (
@@ -81,9 +73,8 @@ const App = () => {
         {list}
       </div>
       <div>
-        <ShowListButton className="Buttons" />
         <button className="Buttons" onClick={showItems}>Show list</button>
-        <button className="Buttons" onClick>Add file</button>
+        <button className="Buttons" onClick={SendFile}>Add file</button>
       </div>
     </div>
   )

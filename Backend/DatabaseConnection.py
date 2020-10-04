@@ -1,39 +1,20 @@
 from pymongo import MongoClient
+import gridfs
 from datetime import datetime
 import json
-from utils import generate_md5, generate_timestamp, JSONEncoder
+from utils import generate_timestamp, JSONEncoder
 
 
 class MongoDbConnectionClient:
     def __init__(self, connectionstring):
         self.client = MongoClient(connectionstring)
         self.db = self.client.InternshipProjectDB
-        self.collection = self.db.FilesCollection
+        self.fs = gridfs.GridFS(self.db)
 
-    def get_all_documents(self):
-        documentList = []
-        for document in self.collection.find():
-            #JSONEncoder().encode() encode MongoDB's ObjectId into string
-            documentList.append(json.loads(JSONEncoder().encode(document)))
-        return documentList
-        
-    def get_document(self, id):
-        document = self.collection.find_one({"id": id})
-        #JSONEncoder().encode() encode MongoDB's ObjectId into string
-        jsonStr = json.loads(JSONEncoder().encode(document))
-        return jsonStr
+    def put_file_into_database(self,name, file):
+        self.fs.put(file, filename=name, upload=generate_timestamp())
+    
+    def list_all_files(self):
+        data = self.fs.list()
+        return data
 
-    def put_document_into_collection(self, name, path):
-        documentAmount = self.collection.count_documents({})
-        document = {
-            "id": documentAmount+1,
-            "name": name,
-            "path": path,
-            "timestamp": generate_timestamp(),
-            "md5": generate_md5(name)
-        }
-        self.collection.insert_one(document).inserted_id
-
-testdb = MongoDbConnectionClient('mongodb+srv://testuser01:test12345@cluster0.hdufc.azure.mongodb.net/InternshipProjectDB?retryWrites=true&w=majority')
-
-print(testdb.get_document(1))

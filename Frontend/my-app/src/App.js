@@ -33,8 +33,8 @@ const ListOfAvaibleItems = (props) => {
     return (
       <ul>
         {items.map(item => (
-          <li key={item.name}>
-            {item.name}
+          <li key={item.toString()}>
+            {item}
           </li>
         ))}
       </ul>
@@ -42,30 +42,14 @@ const ListOfAvaibleItems = (props) => {
   }
 }
 
-const SendFile = (props) => {
-   const data = {
-     name: "fromfrontend",
-     path: "testpath/testpath2"
-   }
-
-   fetch(PROXY_URL+NGROK_URL+"/upload", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-  
-}
-
-const SendF = () => {
+const SendFile = () => {
   const fileInput = React.createRef();
 
   const handleSubmit = (event) =>{
     event.preventDefault();
     const formData = new FormData();
     formData.append('file', fileInput.current.files[0]);
-    fetch(PROXY_URL+NGROK_URL+"/fileupload", {
+    fetch(PROXY_URL+NGROK_URL+"/upload", {
       method: "POST",
       body: formData
     })
@@ -75,6 +59,7 @@ const SendF = () => {
     <form onSubmit={handleSubmit}>
       <label>
         Send file:
+        <br />
         <input type="file" ref={fileInput} />
       </label>
       <br />
@@ -89,7 +74,6 @@ const App = () => {
   const [refreshAction, setRefreshToggle] = useState(true);
 
   const showItems = () => {
-    console.log(refreshAction);
     setList(<ListOfAvaibleItems refresh={refreshAction}/>);
     setRefreshToggle(!refreshAction);
   }
@@ -101,8 +85,7 @@ const App = () => {
       </div>
       <div>
         <button className="Buttons" onClick={showItems}>Show list</button>
-        <button className="Buttons" onClick={SendFile}>Add file</button>
-        <SendF />
+        <SendFile />
       </div>
     </div>
   )

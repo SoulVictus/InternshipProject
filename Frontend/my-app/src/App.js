@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-  //needed to avoid "Access-Control-Allow-Origin" error in browser
+  //needed to avoid "CORS" error in browser
   const PROXY_URL = 'http://cors-anywhere.herokuapp.com/';
   //remember to change ngrok every backend restart
-  const NGROK_URL = 'http://d8c3ee7e4864.ngrok.io';
-
+  const NGROK_URL = 'http://3bb12ce5faa3.ngrok.io';
 
 const ListOfAvaibleItems = (props) => {
   const [error, setError] = useState(null);
   const [items, setItems] = useState([]);
   const [isDataFetched, setFetched] = useState(false);
 
+  //fetchinng data and rendering as list
   useEffect(() => {
     fetch(PROXY_URL+NGROK_URL+"/files")
       .then(res => res.json())
       .then((result) => {
+        console.log(result)
         setItems(result.filelist);
         setFetched(true);
       },
@@ -29,6 +30,8 @@ const ListOfAvaibleItems = (props) => {
     return <div>Error: {error.message}</div>
   } else if (!isDataFetched) {
     return <div>Fetching data...</div>
+  } else if (items.length === 0){ 
+    return <div>No files in database</div>
   } else {
     return (
       <ul>
@@ -45,6 +48,7 @@ const ListOfAvaibleItems = (props) => {
 const SendFile = () => {
   const fileInput = React.createRef();
 
+  //sending  file to server
   const handleSubmit = (event) =>{
     event.preventDefault();
     const formData = new FormData();
@@ -74,6 +78,7 @@ const App = () => {
   const [refreshAction, setRefreshToggle] = useState(true);
 
   const showItems = () => {
+    //rerendering list onclick
     setList(<ListOfAvaibleItems refresh={refreshAction}/>);
     setRefreshToggle(!refreshAction);
   }
@@ -85,6 +90,8 @@ const App = () => {
       </div>
       <div>
         <button className="Buttons" onClick={showItems}>Show list</button>
+      </div>
+      <div>
         <SendFile />
       </div>
     </div>

@@ -6,8 +6,8 @@ def generate_timestamp():
     datestr = "{:%Y-%m-%d %H:%M:%S}".format(datetime.now())
     return datestr
 
-class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
+ALLOWED_EXTENSIONS = {'xml'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

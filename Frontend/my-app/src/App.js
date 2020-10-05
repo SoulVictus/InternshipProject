@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-  //needed to avoid "CORS" error in browser
+  //needed to avoid "CORS" error in browsers
   const PROXY_URL = 'http://cors-anywhere.herokuapp.com/';
-  //remember to change ngrok every backend restart
-  const NGROK_URL = 'http://3bb12ce5faa3.ngrok.io';
+  
+  // CHANGE NGROK URL //
+  const NGROK_URL = 'http://8a2c462b252c.ngrok.io';
+  //                  //
 
 const ListOfAvaibleItems = (props) => {
   const [error, setError] = useState(null);
@@ -16,7 +18,6 @@ const ListOfAvaibleItems = (props) => {
     fetch(PROXY_URL+NGROK_URL+"/files")
       .then(res => res.json())
       .then((result) => {
-        console.log(result)
         setItems(result.filelist);
         setFetched(true);
       },

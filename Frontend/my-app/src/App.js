@@ -5,7 +5,7 @@ import './App.css';
   const PROXY_URL = 'http://cors-anywhere.herokuapp.com/';
   
   // CHANGE NGROK URL //
-  const NGROK_URL = 'http://8a2c462b252c.ngrok.io';
+  const NGROK_URL = 'http://17e6e066593c.ngrok.io';
   //                  //
 
 const ListOfAvaibleItems = (props) => {

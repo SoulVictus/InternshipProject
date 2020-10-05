@@ -10,7 +10,7 @@ To run project:
 
 3. Run "python APIManagment.py" in InternshipProject\Backend\
 
-4. Run ./ngrok http http://127.0.0.1:5000
+4. Run "./ngrok http http://127.0.0.1:5000"
 
 5. Copy first "Forwarding" ngrok url (example: http://213f31513e31.ngrok.io)
 
